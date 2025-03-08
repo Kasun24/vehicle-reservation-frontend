@@ -41,7 +41,7 @@ export default {
         this.errorMessage = "";
         this.username = "";
         this.password = "";
-
+        console.log(response.data);
         // Redirect to login after a short delay
         setTimeout(() => {
           this.$router.push("/login");

@@ -14,9 +14,29 @@
             <router-link class="nav-link" to="/register">Register</router-link>
           </li>
           <li class="nav-item" v-if="authStore.isAuthenticated">
-            <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
+            <router-link class="nav-link" to="/dashboard"
+              >Dashboard</router-link
+            >
           </li>
-          <li class="nav-item" v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'">
+          <li
+            class="nav-item"
+            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
+          >
+            <router-link class="nav-link" to="/customers"
+              >Customers</router-link
+            >
+          </li>
+          <li
+            class="nav-item"
+            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
+          >
+            <router-link class="nav-link" to="/vehicles">Vehicles</router-link>
+          </li>
+
+          <li
+            class="nav-item"
+            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
+          >
             <router-link class="nav-link" to="/admin">Admin Panel</router-link>
           </li>
           <li class="nav-item" v-if="authStore.isAuthenticated">

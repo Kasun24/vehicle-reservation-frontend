@@ -1,29 +1,66 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <router-link class="navbar-brand" to="/">Vehicle Reservation</router-link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/">HomePage</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/login">LoginPage</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/register">RegisterPage</router-link>
-            </li>
-          </ul>
-        </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <router-link class="navbar-brand" to="/">Vehicle Reservation</router-link>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <router-link class="nav-link" to="/">Home</router-link>
+          </li>
+          <li class="nav-item" v-if="!authStore.isAuthenticated">
+            <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li class="nav-item" v-if="!authStore.isAuthenticated">
+            <router-link class="nav-link" to="/register">Register</router-link>
+          </li>
+          <li class="nav-item" v-if="authStore.isAuthenticated">
+            <router-link class="nav-link" to="/dashboard"
+              >Dashboard</router-link
+            >
+          </li>
+          <li
+            class="nav-item"
+            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
+          >
+            <router-link class="nav-link" to="/customers"
+              >Customers</router-link
+            >
+          </li>
+          <li
+            class="nav-item"
+            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
+          >
+            <router-link class="nav-link" to="/vehicles">Vehicles</router-link>
+          </li>
+
+          <li
+            class="nav-item"
+            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
+          >
+            <router-link class="nav-link" to="/admin">Admin Panel</router-link>
+          </li>
+          <li class="nav-item" v-if="authStore.isAuthenticated">
+            <button class="btn btn-danger" @click="logout">Logout</button>
+          </li>
+        </ul>
       </div>
-    </nav>
-  </template>
-  
-  <script>
-  export default {
-    name: "MainNavbar"
-  };
-  </script>  
+    </div>
+  </nav>
+</template>
+
+<script>
+import { useAuthStore } from "@/stores/auth"; // Import the auth store
+
+export default {
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
+  },
+  methods: {
+    logout() {
+      this.authStore.logout();
+      this.$router.push("/login");
+    },
+  },
+};
+</script>

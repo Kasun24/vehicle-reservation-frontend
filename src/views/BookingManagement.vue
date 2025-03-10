@@ -96,6 +96,7 @@
       <thead>
         <tr>
           <th>ID</th>
+          <th>Booking Number</th>
           <th>Customer</th>
           <th>Vehicle</th>
           <th>Driver</th>
@@ -109,6 +110,7 @@
       <tbody>
         <tr v-for="booking in bookings" :key="booking.id">
           <td>{{ booking.id }}</td>
+          <td>{{ booking.bookingNumber }}</td> 
           <td>{{ getCustomerName(booking.customerId) }}</td>
           <td>{{ getVehicleName(booking.vehicleId) }}</td>
           <td>{{ getDriverName(booking.driverId) }}</td>

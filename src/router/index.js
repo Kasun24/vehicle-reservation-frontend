@@ -9,6 +9,7 @@ import CustomerManagement from "@/views/CustomerManagement.vue";
 import VehicleManagement from "@/views/VehicleManagement.vue";
 import BookingManagement from "@/views/BookingManagement.vue";
 import ReportManagement from "@/views/ReportManagement.vue";
+import DriverManagement from "@/views/DriverManagement.vue";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -33,6 +34,11 @@ const routes = [
     path: "/vehicles",
     component: VehicleManagement,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/drivers",
+    component: DriverManagement,
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: "/bookings",

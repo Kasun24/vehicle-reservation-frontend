@@ -9,6 +9,9 @@
       <router-link to="/vehicles" class="btn btn-primary"
         >Manage Vehicles</router-link
       >
+      <router-link to="/drivers" class="btn btn-primary">
+        Manage Drivers
+      </router-link>
       <router-link to="/bookings" class="btn btn-primary"
         >Manage Bookings</router-link
       >

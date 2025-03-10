@@ -13,11 +13,18 @@ export default {
     });
   },
 
-  addDriver(driverData) {
+  createDriver(driverData) {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    return api.post("/drivers", driverData, {
+    const formattedData = {
+      name: driverData.name,
+      phone: driverData.phone,
+      licenseNo: driverData.licenseNo,
+      status: driverData.status,
+    };
+
+    return api.post("/drivers", formattedData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +35,14 @@ export default {
     const authStore = useAuthStore();
     const token = authStore.token;
 
-    return api.put(`/drivers/${driverId}`, driverData, {
+    const formattedData = {
+      name: driverData.name,
+      phone: driverData.phone,
+      licenseNo: driverData.licenseNo,
+      status: driverData.status,
+    };
+
+    return api.put(`/drivers/${driverId}`, formattedData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

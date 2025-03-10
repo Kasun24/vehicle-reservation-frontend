@@ -6,16 +6,49 @@
     <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
     <!-- Add / Edit Customer Form -->
-    <form @submit.prevent="editingCustomer ? updateCustomer() : addCustomer()" class="mb-3">
-      <input v-model="customer.name" type="text" class="form-control mb-2" placeholder="Name" required />
-      <input v-model="customer.address" type="text" class="form-control mb-2" placeholder="Address" required />
-      <input v-model="customer.telephone" type="text" class="form-control mb-2" placeholder="Telephone" required />
-      <input v-model="customer.nic" type="text" class="form-control mb-2" placeholder="NIC" required />
+    <form
+      @submit.prevent="editingCustomer ? updateCustomer() : addCustomer()"
+      class="mb-3"
+    >
+      <input
+        v-model="customer.name"
+        type="text"
+        class="form-control mb-2"
+        placeholder="Name"
+        required
+      />
+      <input
+        v-model="customer.address"
+        type="text"
+        class="form-control mb-2"
+        placeholder="Address"
+        required
+      />
+      <input
+        v-model="customer.telephone"
+        type="text"
+        class="form-control mb-2"
+        placeholder="Telephone"
+        required
+      />
+      <input
+        v-model="customer.nic"
+        type="text"
+        class="form-control mb-2"
+        placeholder="NIC"
+        required
+      />
 
       <button type="submit" class="btn btn-primary">
         {{ editingCustomer ? "Update Customer" : "Add Customer" }}
       </button>
-      <button v-if="editingCustomer" @click="cancelEdit" class="btn btn-secondary ml-2">Cancel</button>
+      <button
+        v-if="editingCustomer"
+        @click="cancelEdit"
+        class="btn btn-secondary ml-2"
+      >
+        Cancel
+      </button>
     </form>
 
     <!-- Customer List -->
@@ -36,8 +69,18 @@
           <td>{{ customer.telephone }}</td>
           <td>{{ customer.nic }}</td>
           <td>
-            <button @click="editCustomer(customer)" class="btn btn-warning btn-sm">Edit</button>
-            <button @click="deleteCustomer(customer.id)" class="btn btn-danger btn-sm ml-2">Delete</button>
+            <button
+              @click="editCustomer(customer)"
+              class="btn btn-warning btn-sm"
+            >
+              Edit
+            </button>
+            <button
+              @click="deleteCustomer(customer.id)"
+              class="btn btn-danger btn-sm ml-2"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -85,7 +128,10 @@ export default {
 
     async updateCustomer() {
       try {
-        await customerService.updateCustomer(this.editingCustomer, this.customer);
+        await customerService.updateCustomer(
+          this.editingCustomer,
+          this.customer
+        );
         this.fetchCustomers();
         this.cancelEdit();
       } catch (error) {
@@ -94,9 +140,16 @@ export default {
     },
 
     async deleteCustomer(customerId) {
+      if (
+        !confirm("Are you sure you want to delete this customer permanently?")
+      ) {
+        return; // Stops execution if the user cancels
+      }
+
       try {
         await customerService.deleteCustomer(customerId);
-        this.fetchCustomers();
+        this.message = "Customer deleted successfully!";
+        await this.fetchCustomers(); // Refresh customer list
       } catch (error) {
         console.error("Error deleting customer:", error);
       }

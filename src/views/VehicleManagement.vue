@@ -3,11 +3,34 @@
     <h2>Vehicle Management</h2>
 
     <!-- Add / Edit Vehicle Form -->
-    <form @submit.prevent="editedVehicle ? updateVehicle() : addVehicle()" class="mb-3">
-      <input v-model="newVehicle.model" type="text" placeholder="Model" class="form-control mb-2" required />
-      <input v-model="newVehicle.brand" type="text" placeholder="Brand" class="form-control mb-2" required />
-      <input v-model="newVehicle.year" type="number" placeholder="Year" class="form-control mb-2" required />
-      <button type="submit" class="btn btn-primary">{{ editedVehicle ? "Update" : "Add" }} Vehicle</button>
+    <form
+      @submit.prevent="editedVehicle ? updateVehicle() : addVehicle()"
+      class="mb-3"
+    >
+      <input
+        v-model="newVehicle.model"
+        type="text"
+        placeholder="Model"
+        class="form-control mb-2"
+        required
+      />
+      <input
+        v-model="newVehicle.brand"
+        type="text"
+        placeholder="Brand"
+        class="form-control mb-2"
+        required
+      />
+      <input
+        v-model="newVehicle.year"
+        type="number"
+        placeholder="Year"
+        class="form-control mb-2"
+        required
+      />
+      <button type="submit" class="btn btn-primary">
+        {{ editedVehicle ? "Update" : "Add" }} Vehicle
+      </button>
     </form>
 
     <!-- Vehicle List -->
@@ -28,8 +51,18 @@
           <td>{{ vehicle.brand }}</td>
           <td>{{ vehicle.year }}</td>
           <td>
-            <button @click="editVehicle(vehicle)" class="btn btn-warning btn-sm">Edit</button>
-            <button @click="deleteVehicle(vehicle.id)" class="btn btn-danger btn-sm">Delete</button>
+            <button
+              @click="editVehicle(vehicle)"
+              class="btn btn-warning btn-sm"
+            >
+              Edit
+            </button>
+            <button
+              @click="deleteVehicle(vehicle.id)"
+              class="btn btn-danger btn-sm"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -81,9 +114,16 @@ export default {
       }
     },
     async deleteVehicle(vehicleId) {
+      if (
+        !confirm("Are you sure you want to delete this vehicle permanently?")
+      ) {
+        return; // Stops execution if the user cancels
+      }
+
       try {
         await vehicleService.deleteVehicle(vehicleId);
-        this.fetchVehicles();
+        this.message = "Vehicle deleted successfully!";
+        await this.fetchVehicles(); // Refresh vehicle list
       } catch (error) {
         console.error("Error deleting vehicle:", error);
       }

@@ -15,6 +15,9 @@
       <router-link to="/bookings" class="btn btn-primary"
         >Manage Bookings</router-link
       >
+      <router-link to="/payments" class="btn btn-primary"
+        >Manage Payments</router-link
+      >
       <router-link to="/reports" class="btn btn-primary"
         >Generate Reports</router-link
       >

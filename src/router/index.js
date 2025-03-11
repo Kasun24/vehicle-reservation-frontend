@@ -7,6 +7,11 @@ import DashboardPage from "@/views/DashboardPage.vue";
 import AdminPage from "@/views/AdminPage.vue";
 import CustomerManagement from "@/views/CustomerManagement.vue";
 import VehicleManagement from "@/views/VehicleManagement.vue";
+import BookingManagement from "@/views/BookingManagement.vue";
+import ReportManagement from "@/views/ReportManagement.vue";
+import DriverManagement from "@/views/DriverManagement.vue";
+import PaymentManagement from "@/views/PaymentManagement.vue";
+import HelpPage from "@/views/HelpPage.vue";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -22,8 +27,37 @@ const routes = [
     component: AdminPage,
     meta: { requiresAuth: true, requiresAdmin: true },
   },
-  { path: "/customers", component: CustomerManagement, meta: { requiresAuth: true } },
-  { path: "/vehicles", component: VehicleManagement, meta: { requiresAuth: true } },
+  {
+    path: "/customers",
+    component: CustomerManagement,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/vehicles",
+    component: VehicleManagement,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/drivers",
+    component: DriverManagement,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/bookings",
+    component: BookingManagement,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/payments",
+    component: PaymentManagement,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/reports",
+    component: ReportManagement,
+    meta: { requiresAuth: true },
+  },
+  { path: "/help", component: HelpPage },
 ];
 
 const router = createRouter({

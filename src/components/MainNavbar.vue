@@ -22,22 +22,10 @@
             class="nav-item"
             v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
           >
-            <router-link class="nav-link" to="/customers"
-              >Customers</router-link
-            >
-          </li>
-          <li
-            class="nav-item"
-            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
-          >
-            <router-link class="nav-link" to="/vehicles">Vehicles</router-link>
-          </li>
-
-          <li
-            class="nav-item"
-            v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"
-          >
             <router-link class="nav-link" to="/admin">Admin Panel</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/help">Help</router-link>
           </li>
           <li class="nav-item" v-if="authStore.isAuthenticated">
             <button class="btn btn-danger" @click="logout">Logout</button>

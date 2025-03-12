@@ -8,15 +8,15 @@
     <!-- Booking Form -->
     <form @submit.prevent="submitBooking">
       <div class="mb-3">
-        <label class="form-label">Customer</label>
-        <select v-model="newBooking.customerId" class="form-control" required>
-          <option disabled value="">Select a Customer</option>
+        <label class="form-label">User</label>
+        <select v-model="newBooking.userId" class="form-control" required>
+          <option disabled value="">Select a User</option>
           <option
-            v-for="customer in customers"
-            :key="customer.id"
-            :value="customer.id"
+            v-for="user in users"
+            :key="user.id"
+            :value="user.id"
           >
-            {{ customer.name }}
+            {{ user.name }}
           </option>
         </select>
       </div>
@@ -97,7 +97,7 @@
         <tr>
           <th>ID</th>
           <th>Booking Number</th>
-          <th>Customer</th>
+          <th>User</th>
           <th>Vehicle</th>
           <th>Driver</th>
           <th>Destination</th>
@@ -111,7 +111,7 @@
         <tr v-for="booking in bookings" :key="booking.id">
           <td>{{ booking.id }}</td>
           <td>{{ booking.bookingNumber }}</td> 
-          <td>{{ getCustomerName(booking.customerId) }}</td>
+          <td>{{ getUserName(booking.userId) }}</td>
           <td>{{ getVehicleName(booking.vehicleId) }}</td>
           <td>{{ getDriverName(booking.driverId) }}</td>
           <td>{{ booking.destination }}</td>
@@ -140,7 +140,7 @@
 
 <script>
 import bookingService from "@/services/bookingService";
-import customerService from "@/services/customerService";
+import userService from "@/services/userService";
 import vehicleService from "@/services/vehicleService";
 import driverService from "@/services/driverService";
 
@@ -148,11 +148,11 @@ export default {
   data() {
     return {
       bookings: [],
-      customers: [],
+      users: [],
       vehicles: [],
       drivers: [],
       newBooking: {
-        customerId: "",
+        userId: "",
         vehicleId: "",
         driverId: "",
         destination: "",
@@ -168,16 +168,16 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const [bookingsRes, customersRes, vehiclesRes, driversRes] =
+        const [bookingsRes, usersRes, vehiclesRes, driversRes] =
           await Promise.all([
             bookingService.getAllBookings(),
-            customerService.getAllCustomers(),
+            userService.getAllUsers(),
             vehicleService.getAllVehicles(),
             driverService.getAllDrivers(),
           ]);
 
         this.bookings = bookingsRes.data;
-        this.customers = customersRes.data;
+        this.users = usersRes.data;
         this.vehicles = vehiclesRes.data;
         this.drivers = driversRes.data;
       } catch (error) {
@@ -188,7 +188,7 @@ export default {
     async submitBooking() {
       try {
         const formattedBooking = {
-          customerId: this.newBooking.customerId,
+          userId: this.newBooking.userId,
           vehicleId: this.newBooking.vehicleId,
           driverId: this.newBooking.driverId || null,
           destination: this.newBooking.destination,
@@ -219,7 +219,7 @@ export default {
       this.isEditing = true;
       this.editingBookingId = booking.id;
       this.newBooking = {
-        customerId: booking.customerId,
+        userId: booking.userId,
         vehicleId: booking.vehicleId,
         driverId: booking.driverId || "",
         destination: booking.destination,
@@ -245,8 +245,8 @@ export default {
       }
     },
 
-    getCustomerName(customerId) {
-      return this.customers.find((c) => c.id === customerId)?.name || "Unknown";
+    getUserName(userId) {
+      return this.users.find((c) => c.id === userId)?.name || "Unknown";
     },
 
     getVehicleName(vehicleId) {
@@ -268,7 +268,7 @@ export default {
 
     resetBooking() {
       this.newBooking = {
-        customerId: "",
+        userId: "",
         vehicleId: "",
         driverId: "",
         destination: "",

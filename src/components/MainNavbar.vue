@@ -18,6 +18,11 @@
               >Dashboard</router-link
             >
           </li>
+          <!-- <li class="nav-item" v-if="authStore.isAuthenticated && authStore.userRole === 'USER'">
+            <router-link class="nav-link" to="/dashboard"
+              >Dashboard</router-link
+            >
+          </li> -->
           <li
             class="nav-item"
             v-if="authStore.isAuthenticated && authStore.userRole === 'ADMIN'"

@@ -3,8 +3,8 @@
     <h2>Admin Panel</h2>
 
     <div class="d-flex gap-2 mt-3">
-      <router-link to="/customers" class="btn btn-primary"
-        >Manage Customers</router-link
+      <router-link to="/users" class="btn btn-primary"
+        >Manage Users</router-link
       >
       <router-link to="/vehicles" class="btn btn-primary"
         >Manage Vehicles</router-link

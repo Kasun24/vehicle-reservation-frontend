@@ -5,13 +5,14 @@ import LoginPage from "@/views/LoginPage.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
 import DashboardPage from "@/views/DashboardPage.vue";
 import AdminPage from "@/views/AdminPage.vue";
-import CustomerManagement from "@/views/CustomerManagement.vue";
+import UserManagement from "@/views/UserManagement.vue";
 import VehicleManagement from "@/views/VehicleManagement.vue";
 import BookingManagement from "@/views/BookingManagement.vue";
 import ReportManagement from "@/views/ReportManagement.vue";
 import DriverManagement from "@/views/DriverManagement.vue";
 import PaymentManagement from "@/views/PaymentManagement.vue";
 import HelpPage from "@/views/HelpPage.vue";
+import UserBookings from "@/views/UserBookings.vue";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -28,8 +29,8 @@ const routes = [
     meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
-    path: "/customers",
-    component: CustomerManagement,
+    path: "/users",
+    component: UserManagement,
     meta: { requiresAuth: true },
   },
   {
@@ -58,6 +59,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   { path: "/help", component: HelpPage },
+  { path: "/my-bookings", component: UserBookings, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({

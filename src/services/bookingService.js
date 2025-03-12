@@ -18,7 +18,7 @@ export default {
     const token = authStore.token;
 
     const formattedData = {
-      customerId: bookingData.customerId,
+      userId: bookingData.userId,
       vehicleId: bookingData.vehicleId,
       driverId: bookingData.driverId || null,
       destination: bookingData.destination,
@@ -39,7 +39,7 @@ export default {
     const token = authStore.token;
 
     const formattedData = {
-      customerId: bookingData.customerId,
+      userId: bookingData.userId,
       vehicleId: bookingData.vehicleId,
       driverId: bookingData.driverId || null,
       destination: bookingData.destination,

@@ -13,6 +13,7 @@ import DriverManagement from "@/views/DriverManagement.vue";
 import PaymentManagement from "@/views/PaymentManagement.vue";
 import HelpPage from "@/views/HelpPage.vue";
 import UserBookings from "@/views/UserBookings.vue";
+import UserProfile from "@/views/UserProfile.vue";
 
 const routes = [
   { path: "/", component: HomePage },
@@ -60,6 +61,7 @@ const routes = [
   },
   { path: "/help", component: HelpPage },
   { path: "/my-bookings", component: UserBookings, meta: { requiresAuth: true } },
+  { path : "/profile", component: UserProfile, meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({

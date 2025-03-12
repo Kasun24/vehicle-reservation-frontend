@@ -113,10 +113,32 @@
             >
               Delete
             </button>
+
+            <!-- Print Bill Button (Visible Only for PAID Payments) -->
+            <button
+              v-if="payment.status === 'PAID'"
+              @click="printBill(payment)"
+              class="btn btn-secondary btn-sm"
+            >
+              Print Bill
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Hidden Bill Template (To Print) -->
+    <div id="bill-template" style="display: none">
+      <h2>Vehicle Reservation System - Payment Receipt</h2>
+      <p><strong>Booking Number:</strong> {{ selectedBill.bookingNumber }}</p>
+      <p><strong>Amount:</strong> ${{ selectedBill.amount }}</p>
+      <p><strong>Tax:</strong> ${{ selectedBill.tax }}</p>
+      <p><strong>Discount:</strong> ${{ selectedBill.discount }}</p>
+      <p><strong>Total Amount:</strong> ${{ selectedBill.totalAmount }}</p>
+      <p><strong>Status:</strong> {{ selectedBill.status }}</p>
+      <hr />
+      <p><em>Thank you for your payment!</em></p>
+    </div>
   </div>
 </template>
 
@@ -139,6 +161,7 @@ export default {
       isEditing: false,
       editingPaymentId: null,
       message: "",
+      selectedBill: {}, // Store selected payment for printing
     };
   },
   methods: {
@@ -188,6 +211,7 @@ export default {
       this.editingPaymentId = payment.id;
       this.newPayment = { ...payment };
     },
+    
     async updatePayment() {
       if (!this.selectedPayment || !this.selectedPayment.id) {
         console.error("Error: Payment ID is missing in updatePayment!");
@@ -205,13 +229,8 @@ export default {
         console.error("Error updating payment details:", error);
       }
     },
-    
-    async updatePaymentStatus(paymentId, status) {
-      if (!paymentId) {
-        console.error("Error: Payment ID is missing in updatePaymentStatus!");
-        return;
-      }
 
+    async updatePaymentStatus(paymentId, status) {
       try {
         await paymentService.updatePaymentStatus(paymentId, status);
         this.message = `Payment status updated to ${status}!`;
@@ -255,6 +274,30 @@ export default {
         discount: 0,
         totalAmount: 0,
       };
+    },
+
+    // ✅ Print Bill Function
+    printBill(payment) {
+      this.selectedBill = {
+        bookingNumber: this.getBookingNumber(payment.bookingId),
+        amount: payment.amount.toFixed(2),
+        tax: payment.tax.toFixed(2),
+        discount: payment.discount.toFixed(2),
+        totalAmount: payment.totalAmount.toFixed(2),
+        status: payment.status,
+      };
+
+      this.$nextTick(() => {
+        const billContent = document.getElementById("bill-template").innerHTML;
+        const printWindow = window.open("", "_blank");
+        printWindow.document.write(
+          "<html><head><title>Print Bill</title></head><body>"
+        );
+        printWindow.document.write(billContent);
+        printWindow.document.write("</body></html>");
+        printWindow.document.close();
+        printWindow.print();
+      });
     },
   },
   async mounted() {

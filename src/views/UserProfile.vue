@@ -55,7 +55,6 @@
         try {
           const response = await userService.getUserProfile();
           this.user = response.data;
-          console.log("User profile:", response.data);
         } catch (error) {
           console.error("Error fetching profile:", error);
           this.errorMessage = "Failed to load profile.";

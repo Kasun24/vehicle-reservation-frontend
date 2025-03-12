@@ -24,23 +24,23 @@
         </div>
       </div>
 
-      <!-- Customer Management Help -->
+      <!-- User Management Help -->
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button
             class="accordion-button"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#customerHelp"
+            data-bs-target="#userHelp"
           >
-            👤 Customer Management
+            👤 User Management
           </button>
         </h2>
-        <div id="customerHelp" class="accordion-collapse collapse">
+        <div id="userHelp" class="accordion-collapse collapse">
           <div class="accordion-body">
-            - **Add new customers** with registration details.<br />
-            - **Update customer info** if necessary.<br />
-            - **Delete customers** (only if they have no active bookings).
+            - **Add new users** with registration details.<br />
+            - **Update user info** if necessary.<br />
+            - **Delete users** (only if they have no active bookings).
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
         </h2>
         <div id="bookingHelp" class="accordion-collapse collapse">
           <div class="accordion-body">
-            - Select a **customer, vehicle, and destination**.<br />
+            - Select a **user, vehicle, and destination**.<br />
             - Assign a **driver** (optional).<br />
             - **Booking status** updates automatically based on changes.<br />
             - **Cancel a booking** if necessary.

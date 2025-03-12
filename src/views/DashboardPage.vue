@@ -6,7 +6,7 @@
         <h4>🔹 User Actions</h4>
         <ul class="list-group">
           <li class="list-group-item">
-            <router-link to="/my-bookings">View My Bookings</router-link>
+            <router-link to="/my-bookings">My Bookings</router-link>
           </li>
           <li class="list-group-item">
             <router-link to="/help">Help & Guidelines</router-link>

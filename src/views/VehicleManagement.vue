@@ -72,6 +72,8 @@
 
 <script>
 import vehicleService from "@/services/vehicleService";
+import { showError, showSuccess } from "@/utils/alert";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -94,9 +96,11 @@ export default {
       try {
         await vehicleService.addVehicle(this.newVehicle);
         this.newVehicle = { model: "", brand: "", year: "" };
+        showSuccess("Vehicle added successfully!");
         this.fetchVehicles();
       } catch (error) {
         console.error("Error adding vehicle:", error);
+        showError("Failed to add vehicle.", error);
       }
     },
     editVehicle(vehicle) {
@@ -108,24 +112,32 @@ export default {
         await vehicleService.updateVehicle(this.editedVehicle, this.newVehicle);
         this.editedVehicle = null;
         this.newVehicle = { model: "", brand: "", year: "" };
+        showSuccess("Vehicle updated successfully!");
         this.fetchVehicles();
       } catch (error) {
         console.error("Error updating vehicle:", error);
+        showError("Failed to update vehicle.", error);
       }
     },
     async deleteVehicle(vehicleId) {
-      if (
-        !confirm("Are you sure you want to delete this vehicle permanently?")
-      ) {
-        return; // Stops execution if the user cancels
-      }
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "This vehicle will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (!confirmation.isConfirmed) return; // Stop if user cancels
 
       try {
         await vehicleService.deleteVehicle(vehicleId);
-        this.message = "Vehicle deleted successfully!";
+        showSuccess("Vehicle deleted successfully!");
         await this.fetchVehicles(); // Refresh vehicle list
       } catch (error) {
-        console.error("Error deleting vehicle:", error);
+        showError(error.response?.data?.error || "Failed to delete vehicle!");
       }
     },
   },

@@ -2,9 +2,6 @@
   <div class="container mt-4">
     <h2>Driver Management</h2>
 
-    <!-- Success / Error Messages -->
-    <p v-if="message" class="alert alert-info">{{ message }}</p>
-
     <!-- Driver Form -->
     <form @submit.prevent="submitDriver">
       <div class="mb-3">
@@ -86,6 +83,8 @@
 
 <script>
 import driverService from "@/services/driverService";
+import { showSuccess, showError } from "@/utils/alert";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -99,7 +98,6 @@ export default {
       },
       isEditing: false,
       editingDriverId: null,
-      message: "",
     };
   },
   methods: {
@@ -117,7 +115,7 @@ export default {
         driverService
           .updateDriver(this.editingDriverId, this.newDriver)
           .then(() => {
-            this.message = "Driver updated successfully!";
+            showSuccess("Driver updated successfully!");
             this.isEditing = false;
             this.newDriver = {
               name: "",
@@ -127,12 +125,15 @@ export default {
             };
             this.fetchDrivers();
           })
-          .catch((error) => console.error("Error updating driver:", error));
+          .catch((error) => {
+            showError("Error updating driver!");
+            console.error("Error updating driver:", error);
+          });
       } else {
         driverService
           .createDriver(this.newDriver)
           .then(() => {
-            this.message = "Driver added successfully!";
+            showSuccess("Driver added successfully!");
             this.newDriver = {
               name: "",
               phone: "",
@@ -141,7 +142,10 @@ export default {
             };
             this.fetchDrivers();
           })
-          .catch((error) => console.error("Error adding driver:", error));
+          .catch((error) => {
+            showError("Error adding driver!");
+            console.error("Error adding driver:", error);
+          });
       }
     },
 
@@ -152,18 +156,26 @@ export default {
     },
 
     async deleteDriver(id) {
-      if (
-        !confirm("Are you sure you want to delete this driver permanently?")
-      ) {
-        return; // Stops execution if the user cancels
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "This driver will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (!confirmation.isConfirmed) {
+        return; // Stop if user cancels
       }
 
       try {
         await driverService.deleteDriver(id);
-        this.message = "Driver deleted successfully!";
-        await this.fetchDrivers(); // Refresh driver list
+        showSuccess("Driver deleted successfully!");
+        this.fetchDrivers(); 
       } catch (error) {
-        console.error("Error deleting driver:", error);
+        showError(error.response?.data?.error || "Failed to delete driver!");
       }
     },
   },

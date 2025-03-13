@@ -2,21 +2,14 @@
   <div class="container mt-4">
     <h2>Booking Management</h2>
 
-    <!-- Success / Error Messages -->
-    <p v-if="message" class="alert alert-info">{{ message }}</p>
-
     <!-- Booking Form -->
     <form @submit.prevent="submitBooking">
       <div class="mb-3">
         <label class="form-label">User</label>
         <select v-model="newBooking.userId" class="form-control" required>
           <option disabled value="">Select a User</option>
-          <option
-            v-for="user in users"
-            :key="user.id"
-            :value="user.id"
-          >
-            {{ user.name }}
+          <option v-for="user in users" :key="user.id" :value="user.id">
+            {{ user.name || user.username }}
           </option>
         </select>
       </div>
@@ -110,7 +103,7 @@
       <tbody>
         <tr v-for="booking in bookings" :key="booking.id">
           <td>{{ booking.id }}</td>
-          <td>{{ booking.bookingNumber }}</td> 
+          <td>{{ booking.bookingNumber }}</td>
           <td>{{ getUserName(booking.userId) }}</td>
           <td>{{ getVehicleName(booking.vehicleId) }}</td>
           <td>{{ getDriverName(booking.driverId) }}</td>
@@ -143,6 +136,8 @@ import bookingService from "@/services/bookingService";
 import userService from "@/services/userService";
 import vehicleService from "@/services/vehicleService";
 import driverService from "@/services/driverService";
+import { showSuccess, showError } from "@/utils/alert";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -162,7 +157,6 @@ export default {
       },
       isEditing: false,
       editingBookingId: null,
-      message: "",
     };
   },
   methods: {
@@ -202,16 +196,17 @@ export default {
             this.editingBookingId,
             formattedBooking
           );
-          this.message = "Booking updated successfully!";
+          showSuccess("Booking updated successfully!");
         } else {
           await bookingService.createBooking(formattedBooking);
-          this.message = "Booking added successfully!";
+          showSuccess("Booking added successfully!");
         }
 
         this.resetBooking();
         await this.fetchData();
       } catch (error) {
         console.error("Error saving booking:", error);
+        showError("Error saving booking.", error);
       }
     },
 
@@ -230,18 +225,26 @@ export default {
     },
 
     async deleteBooking(id) {
-      if (
-        !confirm("Are you sure you want to delete this booking permanently?")
-      ) {
-        return;
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "This booking will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (!confirmation.isConfirmed) {
+        return; // Stop if user cancels
       }
 
       try {
-        await bookingService.deleteBooking(id); 
-        this.message = "Booking deleted successfully!";
-        await this.fetchData(); 
+        await bookingService.deleteBooking(id);
+        showSuccess("Booking deleted successfully!");
+        this.fetchData(); // Refresh booking list
       } catch (error) {
-        console.error("Error deleting booking:", error);
+        showError(error.response?.data?.error || "Failed to delete booking!");
       }
     },
 

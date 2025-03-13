@@ -7,6 +7,7 @@ import router from "./router";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Import Bootstrap JS
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const app = createApp(App);
 app.use(createPinia());

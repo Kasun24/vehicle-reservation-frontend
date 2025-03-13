@@ -9,7 +9,7 @@
         <select v-model="newBooking.userId" class="form-control" required>
           <option disabled value="">Select a User</option>
           <option v-for="user in users" :key="user.id" :value="user.id">
-            {{ user.name }}
+            {{ user.name || user.username }}
           </option>
         </select>
       </div>

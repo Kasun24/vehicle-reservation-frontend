@@ -2,9 +2,6 @@
   <div class="container mt-4">
     <h2>Payment Management</h2>
 
-    <!-- Success / Error Messages -->
-    <p v-if="message" class="alert alert-info">{{ message }}</p>
-
     <!-- Payment Form -->
     <form @submit.prevent="submitPayment">
       <div class="mb-3">
@@ -145,6 +142,8 @@
 <script>
 import paymentService from "@/services/paymentService";
 import bookingService from "@/services/bookingService";
+import { showError, showSuccess } from "@/utils/alert";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -160,7 +159,6 @@ export default {
       },
       isEditing: false,
       editingPaymentId: null,
-      message: "",
       selectedBill: {}, // Store selected payment for printing
     };
   },
@@ -192,17 +190,17 @@ export default {
             this.editingPaymentId,
             this.newPayment
           );
-          this.message = "Payment updated successfully!";
+          showSuccess("Payment updated successfully!");
         } else {
           await paymentService.createPayment(this.newPayment);
-          this.message = "Payment added successfully!";
+          showSuccess("Payment added successfully!");
         }
-
         this.isEditing = false;
         this.resetForm();
         this.fetchData();
       } catch (error) {
         console.error("Error submitting payment:", error);
+        showError("Error submitting payment.", error);
       }
     },
 
@@ -211,7 +209,7 @@ export default {
       this.editingPaymentId = payment.id;
       this.newPayment = { ...payment };
     },
-    
+
     async updatePayment() {
       if (!this.selectedPayment || !this.selectedPayment.id) {
         console.error("Error: Payment ID is missing in updatePayment!");
@@ -223,32 +221,44 @@ export default {
           this.selectedPayment.id,
           this.selectedPayment
         );
-        this.message = "Payment details updated successfully!";
+        showSuccess("Payment details updated successfully!");
         await this.fetchData(); // Refresh list
       } catch (error) {
         console.error("Error updating payment details:", error);
+        showError("Error updating payment details.", error);
       }
     },
 
     async updatePaymentStatus(paymentId, status) {
       try {
         await paymentService.updatePaymentStatus(paymentId, status);
-        this.message = `Payment status updated to ${status}!`;
+        showSuccess(`Payment status updated to ${status}!`);
         await this.fetchData();
       } catch (error) {
         console.error("Error updating payment status:", error);
+        showError("Error updating payment status.", error);
       }
     },
 
     async deletePayment(id) {
-      if (!confirm("Are you sure you want to delete this payment?")) return;
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "This payment will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (!confirmation.isConfirmed) return;
 
       try {
         await paymentService.deletePayment(id);
-        this.message = "Payment deleted successfully!";
-        await this.fetchData();
+        showSuccess("Payment deleted successfully!");
+        await this.fetchData(); // Refresh payment list
       } catch (error) {
-        console.error("Error deleting payment:", error);
+        showError(error.response?.data?.error || "Failed to delete payment!");
       }
     },
 

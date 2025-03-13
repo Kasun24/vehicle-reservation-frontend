@@ -7,11 +7,6 @@
         </h2>
       </div>
 
-      <!-- Error Message -->
-      <div v-if="errorMessage" class="alert alert-danger text-center">
-        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
-      </div>
-
       <!-- Login Form -->
       <form @submit.prevent="login">
         <div class="mb-3">
@@ -52,13 +47,13 @@
 <script>
 import api from "@/services/api";
 import { useAuthStore } from "@/stores/auth";
+import { showSuccess, showError } from "@/utils/alert";
 
 export default {
   data() {
     return {
       username: "",
       password: "",
-      errorMessage: "",
     };
   },
   setup() {
@@ -73,16 +68,20 @@ export default {
           password: this.password,
         });
 
-        // Store token & role in state
+        // ✅ Store token & role in state
         this.authStore.login(response.data.token, response.data.role);
 
-        this.errorMessage = "";
-        this.$router.push("/dashboard"); // Redirect to dashboard
+        // ✅ Show success message
+        showSuccess("Login successful!", "Welcome Back!");
+
+        // ✅ Redirect to dashboard
+        this.$router.push("/dashboard");
+
       } catch (error) {
-        this.errorMessage = "Invalid username or password.";
+        // ✅ Show error message with backend response
+        showError(error.response?.data?.error || "Invalid username or password!");
       }
     },
   },
 };
 </script>
-

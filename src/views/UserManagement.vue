@@ -119,6 +119,8 @@
 
 <script>
 import userService from "@/services/userService";
+import { showSuccess, showError } from "@/utils/alert";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -151,10 +153,11 @@ export default {
     async addUser() {
       try {
         await userService.addUser(this.user);
+        showSuccess("User added successfully!");
         this.fetchUsers();
         this.resetForm();
       } catch (error) {
-        console.error("Error adding user:", error);
+        showError(error.response?.data?.error || "Failed to add user!");
       }
     },
 
@@ -166,32 +169,47 @@ export default {
     async updateUser() {
       try {
         await userService.updateUser(this.editingUser, this.user);
+        showSuccess("User updated successfully!");
         this.fetchUsers();
         this.cancelEdit();
       } catch (error) {
-        console.error("Error updating user:", error);
+        showError(error.response?.data?.error || "Failed to update user!");
       }
     },
 
     async updateUserRole(username, role) {
       try {
         await userService.updateUserRole(username, role);
+        showSuccess("User role updated successfully!");
         this.fetchUsers();
       } catch (error) {
-        console.error("Error updating user role:", error);
+        showError(error.response?.data?.error || "Failed to update user role!");
       }
     },
 
     async deleteUser(username) {
-      if (!confirm("Are you sure you want to delete this user permanently?")) {
+      if (
+        !(
+          await Swal.fire({
+            title: "Are you sure?",
+            text: "This user will be permanently deleted!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+          })
+        ).isConfirmed
+      ) {
         return;
       }
 
       try {
         await userService.deleteUser(username);
+        showSuccess("User deleted successfully!");
         this.fetchUsers();
       } catch (error) {
-        console.error("Error deleting user:", error);
+        showError(error.response?.data?.error || "Failed to delete user!");
       }
     },
 

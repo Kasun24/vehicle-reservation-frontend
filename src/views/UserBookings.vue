@@ -13,7 +13,11 @@
         <label class="form-label">Vehicle</label>
         <select v-model="newBooking.vehicleId" class="form-control" required>
           <option disabled value="">Select a Vehicle</option>
-          <option v-for="vehicle in vehicles" :key="vehicle.id" :value="vehicle.id">
+          <option
+            v-for="vehicle in vehicles"
+            :key="vehicle.id"
+            :value="vehicle.id"
+          >
             {{ vehicle.brand }} - {{ vehicle.model }}
           </option>
         </select>
@@ -31,17 +35,32 @@
 
       <div class="mb-3">
         <label class="form-label">Destination</label>
-        <input v-model="newBooking.destination" type="text" class="form-control" required />
+        <input
+          v-model="newBooking.destination"
+          type="text"
+          class="form-control"
+          required
+        />
       </div>
 
       <div class="mb-3">
         <label class="form-label">Start Date</label>
-        <input v-model="newBooking.startDate" type="date" class="form-control" required />
+        <input
+          v-model="newBooking.startDate"
+          type="date"
+          class="form-control"
+          required
+        />
       </div>
 
       <div class="mb-3">
         <label class="form-label">End Date</label>
-        <input v-model="newBooking.endDate" type="date" class="form-control" required />
+        <input
+          v-model="newBooking.endDate"
+          type="date"
+          class="form-control"
+          required
+        />
       </div>
 
       <button type="submit" class="btn btn-success">Submit Booking</button>
@@ -72,7 +91,11 @@
           <td>{{ booking.endDate }}</td>
           <td>{{ booking.status }}</td>
           <td>
-            <button v-if="booking.status === 'PENDING'" @click="cancelBooking(booking.id)" class="btn btn-danger btn-sm">
+            <button
+              v-if="booking.status === 'PENDING'"
+              @click="cancelBooking(booking.id)"
+              class="btn btn-danger btn-sm"
+            >
               Cancel
             </button>
           </td>
@@ -86,6 +109,8 @@
 import bookingService from "@/services/bookingService";
 import vehicleService from "@/services/vehicleService";
 import driverService from "@/services/driverService";
+import { showError, showSuccess } from "@/utils/alert";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -93,7 +118,13 @@ export default {
       myBookings: [],
       vehicles: [],
       drivers: [],
-      newBooking: { vehicleId: "", driverId: "", destination: "", startDate: "", endDate: "" },
+      newBooking: {
+        vehicleId: "",
+        driverId: "",
+        destination: "",
+        startDate: "",
+        endDate: "",
+      },
       showBookingForm: false,
     };
   },
@@ -116,36 +147,53 @@ export default {
     async createBooking() {
       try {
         await bookingService.createUserBooking(this.newBooking);
-        alert("Booking created successfully!");
-        this.newBooking = { vehicleId: "", driverId: "", destination: "", startDate: "", endDate: "" };
+        showSuccess("Booking created successfully!");
+        this.newBooking = {
+          vehicleId: "",
+          driverId: "",
+          destination: "",
+          startDate: "",
+          endDate: "",
+        };
         this.showBookingForm = false;
         this.fetchData();
       } catch (error) {
         console.error("Error creating booking:", error);
+        showError(error.response?.data?.error || "Failed to create booking!");
       }
     },
 
     async cancelBooking(bookingId) {
-      if (!confirm("Are you sure you want to cancel this booking?")) return;
+      const confirmation = await Swal.fire({
+        title: "Are you sure?",
+        text: "This booking will be cancelled!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, cancel it!",
+      });
+
+      if (!confirmation.isConfirmed) return;
 
       try {
         await bookingService.cancelUserBooking(bookingId);
-        alert("Booking cancelled successfully!");
-        this.fetchData();
+        showSuccess("Booking cancelled successfully!");
+        await this.fetchData(); // Refresh bookings list
       } catch (error) {
-        console.error("Error cancelling booking:", error);
+        showError(error.response?.data?.error || "Failed to cancel booking!");
       }
     },
-
+    
     getVehicleName(vehicleId) {
-      const vehicle = this.vehicles.find(v => v.id === vehicleId);
+      const vehicle = this.vehicles.find((v) => v.id === vehicleId);
       return vehicle ? `${vehicle.brand} - ${vehicle.model}` : "Unknown";
     },
 
     getDriverName(driverId) {
-      const driver = this.drivers.find(d => d.id === driverId);
+      const driver = this.drivers.find((d) => d.id === driverId);
       return driver ? driver.name : "No Driver";
-    }
+    },
   },
   async mounted() {
     await this.fetchData();

@@ -2,9 +2,6 @@
   <div class="container mt-4">
     <h2>User Management</h2>
 
-    <!-- Error Message -->
-    <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-
     <!-- Add / Edit User Form -->
     <form @submit.prevent="editingUser ? updateUser() : addUser()" class="mb-3">
       <input
@@ -136,7 +133,6 @@ export default {
         role: "USER",
       },
       editingUser: null,
-      errorMessage: "",
     };
   },
   methods: {
@@ -145,7 +141,6 @@ export default {
         const response = await userService.getAllUsers();
         this.users = response.data;
       } catch (error) {
-        this.errorMessage = "Failed to load users.";
         console.error("Error fetching users:", error);
       }
     },

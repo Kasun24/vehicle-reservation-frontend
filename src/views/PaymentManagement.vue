@@ -94,19 +94,19 @@
             </button>
             <button
               @click="updatePaymentStatus(payment.id, 'PAID')"
-              class="btn btn-success btn-sm"
+              class="btn btn-success btn-sm ms-1"
             >
               Mark as Paid
             </button>
             <button
               @click="updatePaymentStatus(payment.id, 'CANCELLED')"
-              class="btn btn-danger btn-sm"
+              class="btn btn-danger btn-sm ms-1"
             >
               Cancel Payment
             </button>
             <button
               @click="deletePayment(payment.id)"
-              class="btn btn-danger btn-sm"
+              class="btn btn-danger btn-sm ms-1"
             >
               Delete
             </button>
@@ -115,7 +115,7 @@
             <button
               v-if="payment.status === 'PAID'"
               @click="printBill(payment)"
-              class="btn btn-secondary btn-sm"
+              class="btn btn-secondary btn-sm ms-1"
             >
               Print Bill
             </button>

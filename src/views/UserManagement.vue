@@ -106,7 +106,7 @@
             </button>
             <button
               @click="deleteUser(user.username)"
-              class="btn btn-danger btn-sm ml-2"
+              class="btn btn-danger btn-sm ms-1"
             >
               Delete
             </button>

@@ -77,12 +77,13 @@ export default {
         // ✅ Show success message
         showSuccess("Login successful!", "Welcome Back!");
 
-        // ✅ Redirect user based on role
+        // ✅ Redirect based on role
         if (this.authStore.userRole === "ADMIN") {
-          this.$router.push("/admin"); // Redirect to Admin Panel
+          this.$router.push("/admin");
         } else {
-          this.$router.push("/dashboard"); // Redirect to User Dashboard
+          this.$router.push("/dashboard");
         }
+
       } catch (error) {
         // ✅ Show error message with backend response
         showError(

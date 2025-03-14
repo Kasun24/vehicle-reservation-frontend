@@ -59,7 +59,7 @@
             </button>
             <button
               @click="deleteVehicle(vehicle.id)"
-              class="btn btn-danger btn-sm"
+              class="btn btn-danger btn-sm ms-1"
             >
               Delete
             </button>

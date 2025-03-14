@@ -1,10 +1,10 @@
 <template>
-  <div class="container d-flex justify-content-center align-items-center vh-100">
+  <div
+    class="container d-flex justify-content-center align-items-center vh-100"
+  >
     <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%">
       <div class="text-center">
-        <h2 class="mb-3">
-          <i class="fas fa-sign-in-alt"></i> Login
-        </h2>
+        <h2 class="mb-3"><i class="fas fa-sign-in-alt"></i> Login</h2>
       </div>
 
       <!-- Login Form -->
@@ -38,7 +38,10 @@
 
       <!-- Register Link -->
       <div class="text-center mt-3">
-        <p>Don't have an account? <router-link to="/register">Register</router-link></p>
+        <p>
+          Don't have an account?
+          <router-link to="/register">Register</router-link>
+        </p>
       </div>
     </div>
   </div>
@@ -83,7 +86,9 @@ export default {
 
       } catch (error) {
         // ✅ Show error message with backend response
-        showError(error.response?.data?.error || "Invalid username or password!");
+        showError(
+          error.response?.data?.error || "Invalid username or password!"
+        );
       }
     },
   },

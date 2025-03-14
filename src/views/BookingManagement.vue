@@ -120,7 +120,7 @@
             </button>
             <button
               @click="deleteBooking(booking.id)"
-              class="btn btn-danger btn-sm"
+              class="btn btn-danger btn-sm ms-1"
             >
               Delete
             </button>
